@@ -1,101 +1,160 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>Employee Registration</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>Employee Registration</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-  <style>
-    body {
-      background-color: #f4f6f9;
-      font-family: "Segoe UI", sans-serif;
-    }
-    .auth-card {
-      max-width: 480px;
-      margin: 60px auto;
-      padding: 30px;
-      border-radius: 10px;
-      background: #fff;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-    }
-    .auth-title {
-      font-weight: 600;
-      margin-bottom: 20px;
-      text-align: center;
-    }
-    .form-control, .form-select {
-      height: 45px;
-    }
-    .btn-primary {
-      height: 45px;
-      font-weight: 500;
-    }
-    .small-link {
-      text-align: center;
-      margin-top: 15px;
-    }
-  </style>
+    <style>
+        body {
+            margin: 0;
+            font-family: "Segoe UI", sans-serif;
+            overflow-x: hidden;
+        }
+
+        .left-panel {
+            background: linear-gradient(-45deg, #0d6efd, #6610f2, #6f42c1, #0dcaf0);
+            background-size: 400% 400%;
+            animation: gradientMove 10s ease infinite;
+            color: white;
+            padding: 70px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .left-panel h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+        }
+
+        .left-panel p {
+            margin-top: 20px;
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .form-panel {
+            background: white;
+            padding: 70px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .form-control, .form-select {
+            height: 48px;
+            border-radius: 10px;
+        }
+
+        .btn-primary {
+            height: 48px;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+
+        @media(max-width: 992px) {
+            .left-panel {
+                text-align: center;
+                padding: 40px;
+            }
+            .form-panel {
+                padding: 40px;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-<div class="auth-card">
-  <h4 class="auth-title">Create Employee Account</h4>
+<div class="container-fluid">
+    <div class="row vh-100">
 
-  <form th:action="@{/register}" th:object="${user}" method="post">
+        <!-- LEFT SIDE -->
+        <div class="col-lg-6 left-panel">
+            <h1>Build Your Career.</h1>
+            <h1>Get Hired Faster.</h1>
 
-    <div class="mb-3">
-      <label class="form-label">Full Name</label>
-      <input type="text" class="form-control" th:field="*{fullName}">
-      <div class="text-danger small" th:errors="*{fullName}"></div>
+            <p>
+                Discover jobs that match your skills,
+                apply instantly, and grow with leading companies.
+            </p>
+
+            <p>
+                Your next opportunity starts here.
+            </p>
+        </div>
+
+        <!-- RIGHT SIDE -->
+        <div class="col-lg-6 form-panel">
+
+            <h3 class="text-center mb-4">Create Employee Account</h3>
+
+            <form th:action="@{/register}" th:object="${user}" method="post">
+
+                <div class="mb-3">
+                    <input type="text"
+                           class="form-control"
+                           placeholder="Full Name"
+                           th:field="*{fullName}">
+                    <div class="text-danger small" th:errors="*{fullName}"></div>
+                </div>
+
+                <div class="mb-3">
+                    <input type="email"
+                           class="form-control"
+                           placeholder="Email Address"
+                           th:field="*{email}">
+                    <div class="text-danger small" th:errors="*{email}"></div>
+                </div>
+
+                <div class="mb-3">
+                    <input type="text"
+                           class="form-control"
+                           placeholder="Mobile Number"
+                           th:field="*{mobile}">
+                    <div class="text-danger small" th:errors="*{mobile}"></div>
+                </div>
+
+                <div class="mb-3">
+                    <select class="form-select"
+                            th:field="*{workStatus}">
+                        <option value="">Work Status</option>
+                        <option value="Fresher">Fresher</option>
+                        <option value="Experienced">Experienced</option>
+                    </select>
+                    <div class="text-danger small" th:errors="*{workStatus}"></div>
+                </div>
+
+                <div class="mb-4">
+                    <input type="password"
+                           class="form-control"
+                           placeholder="Create Password"
+                           th:field="*{password}">
+                    <div class="text-danger small" th:errors="*{password}"></div>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100">
+                    Register
+                </button>
+
+                <div class="text-center mt-3">
+                    Already registered?
+                    <a th:href="@{/login}">Login here</a>
+                </div>
+
+            </form>
+        </div>
+
     </div>
-
-    <div class="mb-3">
-      <label class="form-label">Email Address</label>
-      <input type="email" class="form-control" th:field="*{email}">
-      <div class="text-danger small" th:errors="*{email}"></div>
-    </div>
-
-    <div class="mb-3">
-      <label class="form-label">Mobile Number</label>
-      <input type="text" class="form-control" placeholder="10-digit number" th:field="*{mobile}">
-      <div class="text-danger small" th:errors="*{mobile}"></div>
-    </div>
-
-    <div class="mb-3">
-      <label class="form-label">Password</label>
-      <input type="password" class="form-control" th:field="*{password}">
-      <div class="text-danger small" th:errors="*{password}"></div>
-    </div>
-
-    <div class="mb-4">
-      <label class="form-label">Work Status</label>
-      <select class="form-select" th:field="*{workStatus}">
-        <option value="">Select</option>
-        <option value="Fresher">Fresher</option>
-        <option value="Experienced">Experienced</option>
-      </select>
-      <div class="text-danger small" th:errors="*{workStatus}"></div>
-    </div>
-	<div class="mb-3">
-	  <label class="form-label">Upload Resume (PDF)</label>
-	  <input type="file"
-	         class="form-control"
-	         name="resume"
-	         accept=".pdf,.doc,.docx"
-	         required>
-	</div>
-    <button type="submit" class="btn btn-primary w-100">Register</button>
-
-    <div class="small-link">
-      Already registered?
-      <a th:href="@{/login}">Login here</a>
-    </div>
-
-
-  </form>
 </div>
 
 </body>

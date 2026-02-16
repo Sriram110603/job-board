@@ -19,13 +19,19 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/register", "/login", "/css/**", "/js/**")
+                .requestMatchers( "/", 
+                        "/register",
+                        "/employer/**",
+                        "/login",
+                        "/css/**",
+                        "/js/**")
                 .permitAll()
-                .anyRequest().authenticated()
+                .anyRequest().permitAll()
             )
             .formLogin(form -> form
+            		
                 .loginPage("/login")
-                .defaultSuccessUrl("/dashboard", true)
+                .defaultSuccessUrl("/dashboard")
                 .permitAll()
             )
             .logout(logout -> logout
