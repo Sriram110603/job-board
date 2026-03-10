@@ -71,9 +71,11 @@
         <h6 class="mb-0" th:text="${#authentication.name}">User Email</h6>
         <small class="text-muted">Job Seeker</small>
 
-        <button class="btn btn-primary btn-sm mt-3">
-          Complete profile
-        </button>
+		<button 
+		  class="btn btn-primary btn-sm mt-3" 
+		  th:onclick="|window.location.href='@{/profile}'|">
+		  Complete profile
+		</button>
 
         <hr>
 

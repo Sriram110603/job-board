@@ -104,4 +104,9 @@ public class AuthController {
 
         return "redirect:/login";
     }
+    @GetMapping("/employer/login")
+    public String showEmployerLogin() {
+        return "employer-login";
+    }
+
 }
