@@ -8,10 +8,13 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 
 import com.example.jobboard.entity.Employer;
 import com.example.jobboard.entity.User;
+import com.example.jobboard.repository.EmployerRepository;
+import com.example.jobboard.repository.JobRepository;
 import com.example.jobboard.service.EmployerService;
 import com.example.jobboard.service.UserService;
 
@@ -43,21 +46,11 @@ public class AuthController {
     public String showLoginPage() {
         return "login";
     }
+    @Autowired
+    private JobRepository jobRepository;
 
-    // ====================================================
-    // DASHBOARD ROUTING BASED ON ROLE
-    // ====================================================
-    @GetMapping("/dashboard")
-    public String dashboard(Authentication authentication) {
-
-        if (authentication.getAuthorities().stream()
-                .anyMatch(a -> a.getAuthority().equals("ROLE_EMPLOYER"))) {
-
-            return "employer-dashboard";
-        }
-
-        return "employee-dashboard";
-    }
+    @Autowired
+    private EmployerRepository employerRepository;
 
     // ====================================================
     // EMPLOYEE REGISTRATION

@@ -1,23 +1,51 @@
 package com.example.jobboard.controller;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
+import java.time.LocalDate;
 
-import com.example.jobboard.service.JobService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
+
+import com.example.jobboard.entity.Job;
+import com.example.jobboard.entity.Employer;
+import com.example.jobboard.repository.JobRepository;
+import com.example.jobboard.repository.EmployerRepository;
 
 @Controller
+@RequestMapping("/employer")
 public class JobController {
 
-    private final JobService jobService;
+    @Autowired
+    private JobRepository jobRepository;
 
-    public JobController(JobService jobService) {
-        this.jobService = jobService;
-    }
+    @Autowired
+    private EmployerRepository employerRepository;
 
-    @GetMapping("/jobs")
-    public String listJobs(Model model) {
-        model.addAttribute("jobs", jobService.getAllJobs());
-        return "jobs";
+    @PostMapping("/post-job")
+    public String postJob(
+            @RequestParam String title,
+            @RequestParam String location,
+            @RequestParam String description,
+            @RequestParam(required = false) String salary,
+            @RequestParam(required = false) String experience,
+            Authentication authentication
+    ) {
+
+        Employer employer = employerRepository
+                .findByEmail(authentication.getName())
+                .orElseThrow(() -> new RuntimeException("Employer not found"));
+
+        Job job = new Job();
+        job.setTitle(title);
+        job.setLocation(location);
+        job.setDescription(description);
+        job.setExperience(experience);
+        job.setCompany(employer.getCompanyName());
+        job.setPostedDate(LocalDate.now());
+
+        jobRepository.save(job);
+
+        return "redirect:/dashboard";
     }
 }

@@ -1,5 +1,7 @@
 package com.example.jobboard.entity;
 
+import java.util.List;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -12,10 +14,11 @@ public class UserProfile {
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
-
+    @Column(length = 1000)
     private String primarySkills;
-    private String secondarySkills;
 
+    @Column(length = 1000)
+    private String secondarySkills;
     private int totalExperience;
 
     private String city;
@@ -25,7 +28,7 @@ public class UserProfile {
     private String preferredLocations;
 
     private Double expectedSalary;
-    private Double currentCTC;
+    private String relocationRadius;
 
     private String noticePeriod;
 
@@ -115,14 +118,13 @@ public class UserProfile {
         this.expectedSalary = expectedSalary;
     }
 
-    public Double getCurrentCTC() {
-        return currentCTC;
+    public String getRelocationRadius() {
+        return relocationRadius;
     }
 
-    public void setCurrentCTC(Double currentCTC) {
-        this.currentCTC = currentCTC;
+    public void setRelocationRadius(String relocationRadius) {
+        this.relocationRadius = relocationRadius;
     }
-
     public String getNoticePeriod() {
         return noticePeriod;
     }

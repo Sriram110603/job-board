@@ -2,18 +2,16 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Employer Login | High-Growth Portal</title>
+    <title>Login | Job Board</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
-    
     <style>
         :root {
-            --bg-color: #E0E7FF;
-            --accent: #22C55E;
-            --primary: #6366F1;
-            --dark: #1A1A1A;
-            --shadow: 10px 10px 0px 0px #1A1A1A;
+            --bg-color: #f1f5f9;
+            --accent: #FFD600; /* Funky Yellow */
+            --secondary: #00D1FF; /* Funky Blue for Employers */
+            --dark: #000000;
+            --shadow: 8px 8px 0px 0px #000;
         }
 
         body {
@@ -22,219 +20,197 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 100vh; /* Changed from height to min-height for mobile scroll */
+            height: 100vh;
             margin: 0;
-            padding: 20px; /* Padding for mobile edges */
-            overflow-x: hidden;
-            perspective: 1000px;
+            overflow: hidden;
         }
 
-        /* Moving Grid Background */
-        .bg-grid {
-            position: fixed; /* Fixed so it doesn't scroll with content */
-            width: 200%;
-            height: 200%;
-            background-image: 
-                linear-gradient(var(--primary) 2px, transparent 2px),
-                linear-gradient(90deg, var(--primary) 2px, transparent 2px);
-            background-size: 60px 60px;
-            opacity: 0.15;
+        .bg-pattern {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(var(--dark) 1px, transparent 1px);
+            background-size: 30px 30px;
+            opacity: 0.1;
             z-index: -1;
-            transform: rotateX(60deg) translateY(-20%);
-            animation: moveGrid 15s linear infinite;
+            animation: movePattern 20s linear infinite;
         }
 
-        @keyframes moveGrid {
+        @keyframes movePattern {
             from { background-position: 0 0; }
-            to { background-position: 0 60px; }
+            to { background-position: 60px 60px; }
         }
 
-        /* Responsive Main Card */
         .login-card {
             background: #fff;
             border: 4px solid var(--dark);
             box-shadow: var(--shadow);
             width: 100%;
-            max-width: 480px; /* Desktop width */
-            padding: clamp(20px, 5vw, 50px); /* Fluid padding */
+            max-width: 450px;
+            padding: 40px;
+            transform: rotate(-1deg);
+            transition: transform 0.2s ease;
             position: relative;
-            z-index: 10;
         }
 
-        /* Overlapping Employer Badge */
-        .employer-badge {
-            position: absolute;
-            top: -20px;
-            left: 20px;
-            background: var(--dark);
-            color: #fff;
-            padding: 8px 15px;
-            font-weight: 900;
-            font-family: 'Syne', sans-serif;
-            text-transform: uppercase;
-            transform: rotate(-3deg);
-            border: 3px solid var(--primary);
-            font-size: clamp(0.8rem, 2vw, 1.1rem);
-            letter-spacing: 1px;
-            white-space: nowrap;
+        .login-card:hover {
+            transform: rotate(0deg) scale(1.01);
         }
 
-        .login-title {
-            font-family: 'Syne', sans-serif;
-            font-weight: 800;
-            /* clamp(min, preferred, max) - perfectly responsive font */
-            font-size: clamp(2.5rem, 8vw, 3.5rem);
-            margin-top: 15px;
-            margin-bottom: 0px;
-            color: var(--dark);
-            letter-spacing: -2px;
-            line-height: 0.9;
-        }
-
-        .subtitle {
-            font-weight: 700;
-            margin-bottom: 30px;
-            color: var(--primary);
-            text-transform: uppercase;
-            font-size: clamp(0.7rem, 2vw, 0.9rem);
-            letter-spacing: 2px;
-        }
-
-        label {
-            font-weight: 800;
-            text-transform: uppercase;
-            font-size: 0.75rem;
-            margin-bottom: 8px;
-            display: block;
-            color: var(--dark);
-        }
-
-        .form-control {
-            border: 4px solid var(--dark);
-            border-radius: 0;
-            height: clamp(55px, 8vw, 65px);
-            font-weight: 700;
-            margin-bottom: 20px;
-            font-size: 1rem;
-            transition: all 0.2s ease;
-            background: #fff;
-        }
-
-        /* The Funky Action Button */
-        .btn-hiring {
-            background: var(--accent);
-            color: var(--dark);
-            border: 4px solid var(--dark);
-            border-radius: 0;
-            height: clamp(65px, 10vw, 75px);
-            font-weight: 900;
-            font-family: 'Syne', sans-serif;
-            font-size: clamp(1.1rem, 4vw, 1.4rem);
-            text-transform: uppercase;
-            width: 100%;
-            margin-top: 10px;
-            transition: 0.1s;
-            box-shadow: 6px 6px 0px 0px var(--dark);
-        }
-
-        .footer-links {
-            margin-top: 30px;
+        /* --- ROLE SWITCHER STYLES --- */
+        .role-selector {
             display: flex;
-            flex-wrap: wrap; /* Wraps links on tiny screens */
             gap: 10px;
-            justify-content: space-between;
+            margin-bottom: 25px;
+        }
+
+        .role-option {
+            flex: 1;
+            position: relative;
+        }
+
+        .role-option input[type="radio"] {
+            display: none;
+        }
+
+        .role-label {
+            display: block;
+            text-align: center;
+            padding: 10px;
+            border: 3px solid var(--dark);
             font-weight: 800;
+            cursor: pointer;
+            transition: 0.1s;
+            background: #fff;
+            text-transform: uppercase;
             font-size: 0.85rem;
         }
 
-        /* Responsive Sticker */
-        .sticker {
-            position: absolute;
-            bottom: -30px;
-            right: -20px;
-            width: clamp(80px, 15vw, 110px);
-            height: clamp(80px, 15vw, 110px);
-            background: #FFD600;
-            border: 4px solid var(--dark);
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        /* Candidate Styling */
+        input[id="employee"]:checked + .role-label {
+            background: var(--accent);
+            box-shadow: 4px 4px 0px 0px var(--dark);
+            transform: translate(-2px, -2px);
+        }
+
+        /* Employer Styling */
+        input[id="employer"]:checked + .role-label {
+            background: var(--secondary);
+            box-shadow: 4px 4px 0px 0px var(--dark);
+            transform: translate(-2px, -2px);
+        }
+
+        .brand-tag {
+            background: var(--accent);
+            color: var(--dark);
+            font-weight: 800;
+            padding: 5px 15px;
+            border: 2px solid var(--dark);
+            display: inline-block;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+        }
+
+        .login-title {
             font-weight: 900;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            line-height: 1;
+        }
+
+        .form-control {
+            border: 3px solid var(--dark);
+            border-radius: 0;
+            height: 55px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .form-control:focus {
+            box-shadow: 4px 4px 0px 0px var(--accent);
+            border-color: var(--dark);
+            outline: none;
+        }
+
+        .btn-funky {
+            background: var(--dark);
+            color: #fff;
+            border: none;
+            border-radius: 0;
+            height: 60px;
+            font-weight: 800;
+            text-transform: uppercase;
+            width: 100%;
+            transition: 0.1s;
+        }
+
+        .btn-funky:hover {
+            background: var(--dark);
+            box-shadow: 6px 6px 0px 0px var(--accent);
+            transform: translate(-3px, -3px);
+        }
+
+        .footer-text {
+            margin-top: 25px;
             text-align: center;
-            line-height: 1.1;
+            font-weight: 700;
+        }
+
+        .footer-text a {
+            color: var(--dark);
+            text-decoration: underline;
+            text-decoration-thickness: 3px;
+        }
+
+        .floating-circle {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background: #FF6B6B;
+            border: 4px solid var(--dark);
             border-radius: 50%;
-            transform: rotate(15deg);
-            animation: wiggle 4s infinite ease-in-out;
-            font-size: clamp(0.6rem, 1.5vw, 0.8rem);
-            z-index: 20;
-            pointer-events: none; /* Prevents sticker from blocking clicks */
+            top: -40px;
+            right: -30px;
+            z-index: -1;
+            animation: float 4s ease-in-out infinite;
         }
 
-        @keyframes wiggle {
-            0%, 100% { transform: rotate(15deg) scale(1); }
-            50% { transform: rotate(-5deg) scale(1.1); }
-        }
-
-        /* Medium Devices (Tablets) */
-        @media (max-width: 768px) {
-            .login-card {
-                max-width: 400px;
-                padding: 30px;
-            }
-            .bg-grid {
-                animation: moveGrid 25s linear infinite; /* Slow down bg on mobile */
-            }
-        }
-
-        /* Small Devices (Phones) */
-        @media (max-width: 480px) {
-            .login-card {
-                box-shadow: 6px 6px 0px 0px var(--dark); /* Smaller shadow for smaller screen */
-            }
-            .sticker {
-                bottom: -20px;
-                right: -10px;
-            }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
         }
     </style>
 </head>
 <body>
 
-    <div class="bg-grid"></div>
+<div class="bg-pattern"></div>
 
-    <div class="login-card">
-        <div class="employer-badge">Employer Portal</div>
+<div class="login-card">
+    <div class="floating-circle"></div>
+    <div class="brand-tag">Portal Access</div>
+    <h1 class="login-title">LOGIN.</h1>
+    
+    <form th:action="@{/login}" method="post">
         
-        <h1 class="login-title">HIRE<br>ELITE.</h1>
-        <p class="subtitle">Secure your dream team.</p>
         
-        <form th:action="@{/login}" method="post">
-            <div>
-                <label for="username">Admin Email</label>
-                <input type="email" id="username" name="username" class="form-control" placeholder="ceo@company.com" required>
-            </div>
-            
-            <div>
-                <label for="password">Security Passcode</label>
-                <input type="password" id="password" name="password" class="form-control" placeholder="••••••••" required>
-            </div>
-            
-            <button type="submit" class="btn btn-hiring">
-                ENTER CENTER →
-            </button>
 
-            <div class="footer-links">
-                <a href="#">Reset Key?</a>
-                <a th:href="@{/register}">Add Company</a>
-            </div>
+        <input type="email" name="username" class="form-control" placeholder="YOUR EMAIL" required>
+        <input type="password" name="password" class="form-control" placeholder="YOUR PASSWORD" required>
+        
+        <button type="submit" class="btn btn-funky">
+            Enter the Portal →
+        </button>
 
-            <div th:if="${param.error}" class="alert-error">
-                AUTH ERROR
-            </div>
-        </form>
+        <div class="footer-text">
+            No account? <a th:href="@{/register}">Sign up now</a>
+        </div>
 
-        <div class="sticker">SCALE<br>YOUR<br>TEAM</div>
-    </div>
+        <div th:if="${param.error}" style="background: #FF6B6B; border: 3px solid #000; padding: 10px; margin-top: 15px; font-weight: 800; text-align: center;">
+            ACCESS DENIED: WRONG EMAIL/PASS
+        </div>
+    </form>
+</div>
 
 </body>
 </html>
