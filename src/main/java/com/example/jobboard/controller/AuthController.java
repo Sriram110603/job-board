@@ -8,8 +8,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.example.jobboard.entity.Employer;
 import com.example.jobboard.entity.User;
@@ -20,7 +22,8 @@ import com.example.jobboard.service.UserService;
 
 @Controller
 public class AuthController {
-
+	@Autowired
+	private PasswordEncoder passwordEncoder;
     private final UserService userService;
     private final EmployerService employerService;
 
@@ -74,7 +77,41 @@ public class AuthController {
 
         return "redirect:/login";
     }
+    // Forgot Password
+    @GetMapping("/forgot-password")
+    public String forgotPasswordPage() {
+        return "forgot-password";
+    }
 
+    @PostMapping("/forgot-password")
+    public String processForgotPassword(@RequestParam String email, Model model) {
+
+        User user = userService.findByEmail(email);
+
+        if (user == null) {
+            model.addAttribute("error", "Email not found");
+            return "forgot-password";
+        }
+
+        model.addAttribute("email", email);
+        return "reset-password";
+    }
+    @PostMapping("/reset-password")
+    public String resetPassword(@RequestParam String email,
+                                @RequestParam String password) {
+
+        User user = userService.findByEmail(email);
+
+        if (user == null) {
+            return "redirect:/forgot-password";
+        }
+
+        user.setPassword(passwordEncoder.encode(password));
+
+        userService.save(user);
+
+        return "redirect:/login";
+    }
     // ====================================================
     // EMPLOYER REGISTRATION
     // ====================================================
