@@ -12,6 +12,7 @@
             animation: gradientMove 10s ease infinite;
             min-height: 100vh;
             font-family: "Segoe UI", sans-serif;
+			
             padding-top: 50px;
         }
 
@@ -20,6 +21,20 @@
             50% {background-position: 100% 50%;}
             100% {background-position: 0% 50%;}
         }
+		.profile-card {
+		    border-radius: 18px;
+		    transition: all 0.3s ease;
+		    background: white;
+		}
+
+		.profile-card:hover {
+		    transform: translateY(-6px);
+		    box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+		}
+
+		.profile-card .badge {
+		    font-size: 12px;
+		}
 
         .dashboard-card {
             background: rgba(255, 255, 255, 0.95);
@@ -50,6 +65,9 @@
 				    <h2>Employer Dashboard</h2>
 
 				    <div>
+						<a href="/employer/profile" class="btn btn-outline-primary btn-sm me-2">
+						    Profile
+						</a>
 				        <span class="badge bg-primary me-3">
 				            Welcome, <span th:text="${employerName}">Company</span>
 				        </span>
@@ -67,6 +85,15 @@
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="view-jobs-tab" data-bs-toggle="pill" data-bs-target="#view-jobs" type="button">View Posted Jobs</button>
                     </li>
+					<li class="nav-item" role="presentation">
+					    <button class="nav-link"
+					            id="suggested-profiles-tab"
+					            data-bs-toggle="pill"
+					            data-bs-target="#suggested-profiles"
+					            type="button">
+					        Suggested Profiles
+					    </button>
+					</li>
                 </ul>
 
                 <div class="tab-content" id="pills-tabContent">
@@ -139,35 +166,111 @@
                             </div>
                         </form>
                     </div>
+					<div class="tab-pane fade" id="view-jobs" role="tabpanel">
 
-                    <div class="tab-pane fade" id="view-jobs" role="tabpanel">
-                        <h4>Manage Applications</h4>
-                        <hr>
-						<div class="table-responsive">
-							<table class="table">
-							    <thead>
-							        <tr>
-							            <th>Job</th>
-							            <th>Candidate</th>
-							            <th>Applied Date</th>
-							            <th>Status</th>
-							        </tr>
-							    </thead>
+					    <h4>Manage Applications</h4>
+					    <hr>
 
-							    <tbody>
-							        <tr th:each="app : ${applications}">
-							            <td th:text="${app.job.title}"></td>
-							            <td th:text="${app.user.email}"></td>
-							            <td th:text="${app.appliedDate}"></td>
-							            <td th:text="${app.status}"></td>
-							        </tr>
-							    </tbody>
-							</table>
-						</div>                    </div>
-                </div> </div>
-        </div>
-    </div>
-</div>
+					    <div class="table-responsive">
+					        <table class="table table-hover align-middle">
+
+					            <thead class="table-light">
+					                <tr>
+					                    <th>Job</th>
+					                    <th>Candidate</th>
+					                    <th>Applied Date</th>
+					                    <th>Status</th>
+					                </tr>
+					            </thead>
+
+					            <tbody>
+					                <tr th:each="app : ${applications}">
+					                    <td th:text="${app.job.title}"></td>
+					                    <td th:text="${app.user.email}"></td>
+					                    <td th:text="${app.appliedDate}"></td>
+
+					                    <td>
+					                        <span class="badge bg-success"
+					                              th:text="${app.status}">
+					                        </span>
+					                    </td>
+					                </tr>
+					            </tbody>
+
+					        </table>
+					    </div>
+
+					</div>
+
+					<!-- SUGGESTED PROFILES TAB -->
+
+					<div class="tab-pane fade"
+					     id="suggested-profiles"
+					     role="tabpanel">
+
+					    <h4 class="mb-4">Suggested Candidate Profiles</h4>
+
+					    <div class="row">
+
+					        <div class="col-md-6 mb-4"
+					             th:each="candidate : ${candidates}">
+
+					            <div class="card border-0 shadow-lg h-100 profile-card">
+
+					                <div class="card-body">
+
+					                    <!-- TOP SECTION -->
+
+					                    <div class="d-flex justify-content-between align-items-start mb-3">
+
+					                        <div>
+					                            <h5 class="fw-bold mb-1"
+					                                th:text="${candidate.fullName}">
+					                            </h5>
+
+					                            <p class="text-muted mb-0"
+					                               th:text="${candidate.email}">
+					                            </p>
+					                        </div>
+
+					                        <span class="badge rounded-pill bg-primary px-3 py-2"
+					                              th:text="${candidate.workStatus}">
+					                        </span>
+
+					                    </div>
+
+					                    <!-- MOBILE -->
+
+					                    <div class="mb-3">
+
+					                        <small class="text-secondary fw-semibold">
+					                            Mobile
+					                        </small>
+
+					                        <p class="mb-0"
+					                           th:text="${candidate.mobile}">
+					                        </p>
+
+					                    </div>
+
+					                    <!-- RESUME -->
+										<div class="mt-4">
+
+										    <button class="btn btn-outline-primary btn-sm">
+										        View Profile
+										    </button>
+
+										</div>
+
+					                </div>
+
+					            </div>
+
+					        </div>
+
+					    </div>
+
+					</div>
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-rc.0/css/select2.min.css" rel="stylesheet"/>
 
